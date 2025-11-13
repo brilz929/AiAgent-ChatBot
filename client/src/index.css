@@ -260,7 +260,7 @@ textarea:disabled {
   
   .header-controls {
     width: 100%;
-    justify-content: space-between;
+    justify-content: center;
   }
   
   .thread-id {
