@@ -43,16 +43,72 @@ const model = new ChatAnthropic({
 });
 
 // Weather tool (simplified)
+// const weatherTool = tool(
+//   async ({ query }) => {
+//     return `Weather in ${query}:`;
+//   },
+//   {
+//     name: 'weather',
+//     description: 'Get weather for a city',
+//     schema: z.object({
+//       query: z.string(),
+//     }),
+//   }
+// );
+
 const weatherTool = tool(
   async ({ query }) => {
-    return `Weather in ${query}: 72°F and sunny`;
+    try {
+      // Get API key from environment variables
+      const apiKey = process.env.WEATHER_API_KEY;
+      console.log('Using WeatherAPI key:', apiKey ? '***' + apiKey.slice(-4) : 'Not found');
+      if (!apiKey) {
+        throw new Error('WeatherAPI key not found. Please set WEATHER_API_KEY in your environment variables.');
+      }
+      
+      // Make request to WeatherAPI
+      const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${encodeURIComponent(query)}&aqi=no`;
+      console.log('Fetching weather from:', url);
+      
+      const response = await fetch(url);
+      const responseText = await response.text();
+      console.log('Weather API response status:', response.status);
+      console.log('Weather API response:', responseText);
+      
+      if (!response.ok) {
+        let errorMessage = `HTTP ${response.status}`;
+        try {
+          const errorData = JSON.parse(responseText);
+          errorMessage = errorData.error?.message || JSON.stringify(errorData);
+        } catch (e) {
+          errorMessage = responseText || 'No error details';
+        }
+        throw new Error(`Failed to fetch weather data: ${errorMessage}`);
+      }
+      
+      const data = JSON.parse(responseText);
+      const { location, current } = data;
+      
+      // Format the weather information
+      return `🌤️ Weather in ${location.name}, ${location.region ? location.region + ', ' : ''}${location.country}:
+• Temperature: ${Math.round(current.temp_f)}°F (Feels like ${Math.round(current.feelslike_f)}°F)
+• Conditions: ${current.condition.text}
+• Humidity: ${current.humidity}%
+• Wind: ${Math.round(current.wind_mph)} mph ${current.wind_dir}
+• Precipitation: ${current.precip_in} in
+• Cloud Cover: ${current.cloud}%`;
+      
+    } catch (error) {
+      console.error('Weather API Error:', error);
+      return `I couldn't get the weather for ${query}. Please try again in a moment or check the city name.`;
+    }
   },
   {
-    name: 'weather',
-    description: 'Get weather for a city',
+    name: "weather",
+    description: "Get current weather for a city. Always include the state or country for better accuracy (e.g., 'Austin, Texas' instead of just 'Austin')",
     schema: z.object({
-      query: z.string(),
-    }),
+      query: z.string().describe("The city name and optionally state/country (e.g., 'Paris, France' or 'Austin, TX')")
+    })
   }
 );
 
