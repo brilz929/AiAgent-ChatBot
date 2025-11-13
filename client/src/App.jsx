@@ -109,7 +109,6 @@ function App() {
       <header className="header">
         <h1>🤖 AI Agent Chat</h1>
         <div className="header-controls">
-          <span className="thread-id">Thread: {threadId.slice(0, 15)}...</span>
           <button 
             className="new-chat-btn"
             onClick={handleNewChat}
@@ -132,9 +131,6 @@ function App() {
               <li>🔢 Math calculations</li>
               <li>💡 General questions</li>
             </ul>
-            <p className="thread-info">
-              Current Thread: <code>{threadId}</code>
-            </p>
           </div>
         ) : (
           messages.map(msg => (
