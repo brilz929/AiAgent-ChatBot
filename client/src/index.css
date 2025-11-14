@@ -252,10 +252,19 @@ textarea:disabled {
 
 /* Responsive */
 @media (max-width: 768px) {
+  .app {
+    max-width: 100%;
+  }
+
   .header {
     flex-direction: column;
     gap: 1rem;
-    padding: 1rem;
+    padding: 0.8rem;
+    text-align: center;
+  }
+  
+  .header h1 {
+    font-size: 1.3rem;
   }
   
   .header-controls {
@@ -263,12 +272,35 @@ textarea:disabled {
     justify-content: center;
   }
   
-  .thread-id {
-    font-size: 0.7rem;
+  .new-chat-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    width: 100%;
+    justify-content: center;
   }
   
-  .new-chat-btn {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
+  .messages {
+    padding: 1rem;
+  }
+  
+  .message.user .message-content,
+  .message.assistant .message-content {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  .input-area {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .send-btn {
+    width: 100%;
+    padding: 0.75rem;
+  }
+  
+  textarea {
+    min-height: 80px;
   }
 }

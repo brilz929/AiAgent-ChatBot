@@ -9,8 +9,33 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middleware
-app.use(cors({ origin: '*' }));
+// CORS Configuration
+const allowedOrigins = [
+  'https://ai-agent-chat-bot.vercel.app',
+  'https://aiagent-chatbot.onrender.com',
+  'http://localhost:3000',
+  'http://localhost:3001'
+];
+
+// CORS middleware
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Handle preflight requests
+app.options('*', cors());
 app.use(express.json());
 
 // Health check
