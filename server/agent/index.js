@@ -14,7 +14,8 @@ const allowedOrigins = [
   'https://ai-agent-chat-bot.vercel.app',
   'https://aiagent-chatbot.onrender.com',
   'http://localhost:3000',
-  'http://localhost:3001'
+  'http://localhost:3001',
+  'http://localhost:5173'
 ];
 
 // CORS middleware with simplified configuration
