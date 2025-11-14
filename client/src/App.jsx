@@ -1,6 +1,3 @@
-// client/src/App.jsx
-// Updated with New Chat button functionality
-
 import { useState, useEffect, useRef } from 'react';
 
 function App() {
@@ -107,7 +104,7 @@ function App() {
     <div className="app">
       {/* Header with New Chat Button */}
       <header className="header">
-        <h1>🤖 AI Agent Chat</h1>
+        <h1>🤖 AI Chatbot</h1>
         <div className="header-controls">
           <button 
             className="new-chat-btn"
